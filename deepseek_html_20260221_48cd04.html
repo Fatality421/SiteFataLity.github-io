@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформление заказа</title>
+    <style>
+        /* Общие стили */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Базовая страница-контейнер с синим фоном */
+        .page {
+            background-color: #1E3A8A;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Левое выравнивание для страницы заказа */
+        #orderPage {
+            align-items: flex-start;
+            padding-left: 50px;
+        }
+
+        /* Скрытая страница */
+        .hidden {
+            display: none;
+        }
+
+        /* Картинка (имитация) */
+        .image-placeholder {
+            width: 260px;
+            height: 130px;
+            background: linear-gradient(145deg, #ffffff 0%, #e6e6e6 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1E3A8A;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            border: 4px solid white;
+            transition: transform 0.2s;
+        }
+
+        .image-placeholder:hover {
+            transform: scale(1.02);
+        }
+
+        /* Блок цены */
+        .price-block {
+            margin: 25px 0 20px 0;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 12px 30px;
+            border-radius: 50px;
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1px;
+        }
+
+        /* Кнопки */
+        .button {
+            padding: 18px 40px;
+            font-size: 1.7rem;
+            font-weight: bold;
+            color: white;
+            background-color: #FF8C00;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s, transform 0.1s;
+            letter-spacing: 1.5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .button:hover {
+            background-color: #E07B00;
+        }
+
+        .button:active {
+            transform: scale(0.97);
+        }
+
+        /* Дополнительный текст на странице оплаты */
+        .payment-message {
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Кнопка "назад" менее заметная */
+        .back-button {
+            margin-top: 20px;
+            background-color: #555;
+            font-size: 1rem;
+            padding: 10px 20px;
+        }
+        .back-button:hover {
+            background-color: #444;
+        }
+
+        @media (max-width: 600px) {
+            #orderPage {
+                padding-left: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- СТРАНИЦА 1: Оформление заказа (слева) -->
+    <div id="orderPage" class="page">
+        <div class="image-placeholder">ЗАКАЗ</div>
+        <div class="price-block">Цена 400 рублей</div>
+        <button class="button" id="orderBtn">оформить заказ</button>
+    </div>
+
+    <!-- СТРАНИЦА 2: Оплата (изначально скрыта) -->
+    <div id="paymentPage" class="page hidden">
+        <div class="payment-message">Ваш заказ на сумму 400 рублей</div>
+        <!-- Кнопка оплаты с обновлённой ссылкой -->
+        <button class="button" id="payBtn">оплатить</button>
+        <!-- Кнопка "назад" для возврата к оформлению -->
+        <button class="button back-button" id="backBtn">← Вернуться</button>
+    </div>
+
+    <script>
+        const orderPage = document.getElementById('orderPage');
+        const paymentPage = document.getElementById('paymentPage');
+        const orderBtn = document.getElementById('orderBtn');
+        const payBtn = document.getElementById('payBtn');
+        const backBtn = document.getElementById('backBtn');
+
+        // Переход на страницу оплаты при клике на "оформить заказ"
+        orderBtn.addEventListener('click', () => {
+            orderPage.classList.add('hidden');
+            paymentPage.classList.remove('hidden');
+            window.location.hash = '#payment';
+        });
+
+        // Кнопка "оплатить" открывает новую ссылку в новой вкладке
+        payBtn.addEventListener('click', () => {
+            window.open('https://funpay.com/lots/offer?id=64516899', '_blank');
+        });
+
+        // Кнопка "назад" для возврата к заказу
+        backBtn.addEventListener('click', () => {
+            paymentPage.classList.add('hidden');
+            orderPage.classList.remove('hidden');
+            window.location.hash = '#order';
+        });
+
+        // Обработка хеша при загрузке и изменении
+        function handleHash() {
+            if (window.location.hash === '#payment') {
+                orderPage.classList.add('hidden');
+                paymentPage.classList.remove('hidden');
+            } else if (window.location.hash === '#order') {
+                paymentPage.classList.add('hidden');
+                orderPage.classList.remove('hidden');
+            }
+        }
+
+        window.addEventListener('load', handleHash);
+        window.addEventListener('hashchange', handleHash);
+    </script>
+</body>
+</html>
